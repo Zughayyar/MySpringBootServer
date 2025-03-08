@@ -19,7 +19,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
     // Register a User
     public User registerUser(User newUser, BindingResult bindingResult) {
         Optional<User> existingUser = userRepository.findByEmail(newUser.getEmail());
@@ -42,7 +41,11 @@ public class UserService {
         // Hash and set password, save user to database
         String hashedPassword = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
         newUser.setPassword(hashedPassword);
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+
+        // making sure object returned to controller is without visible password.
+        savedUser.setConfirmPassword("");
+        return userRepository.save(savedUser);
     }
 
     // Login User:

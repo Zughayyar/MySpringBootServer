@@ -30,7 +30,6 @@ public class RegisterController {
             @Valid @RequestBody User user,
             BindingResult bindingResult
     ) {
-        System.out.println(user.toString());
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getFieldErrors()
                     .stream()
@@ -39,8 +38,8 @@ public class RegisterController {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
 
-        userService.registerUser(user, bindingResult);
-        return ResponseEntity.ok(user);
+        User newUser = userService.registerUser(user, bindingResult);
+        return ResponseEntity.ok(newUser);
     }
 
 }
